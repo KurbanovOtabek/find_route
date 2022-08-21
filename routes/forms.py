@@ -48,5 +48,5 @@ class RouteModelForm(forms.ModelForm):
 
 
     class Meta:
-        model =Route
+        model = Route
         fields = '__all__'

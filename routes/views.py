@@ -9,7 +9,6 @@ from routes.forms import RouteForm, RouteModelForm
 from routes.models import Route
 
 from routes.utils import get_routes
-# from trains import Train
 from trains.models import Train
 
 

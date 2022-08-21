@@ -90,20 +90,7 @@
     "name": "Tashkent"
   }
 },
-{
-  "model": "routes.route",
-  "pk": 1,
-  "fields": {
-    "name": "number1",
-    "travel_times": 50,
-    "from_city": 2,
-    "to_city": 11,
-    "trains": [
-      5,
-      4
-    ]
-  }
-},
+
 {
   "model": "routes.route",
   "pk": 3,
