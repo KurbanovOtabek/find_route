@@ -25,4 +25,4 @@ class Route(models.Model):
     class Meta:
         verbose_name = 'Маршрут'
         verbose_name_plural = 'Маршруты'
-        ordering = ['name']
+        ordering = ['travel_times']
