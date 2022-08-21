@@ -91,7 +91,7 @@
   }
 },
 {
-  "model": "routes_route",
+  "model": "routes.route",
   "pk": 1,
   "fields": {
     "name": "number1",
@@ -105,7 +105,7 @@
   }
 },
 {
-  "model": "routes_route",
+  "model": "routes.route",
   "pk": 3,
   "fields": {
     "name": "try",
@@ -118,7 +118,7 @@
   }
 },
 {
-  "model": "routes_route",
+  "model": "routes.route",
   "pk": 4,
   "fields": {
     "name": "atlanta",
