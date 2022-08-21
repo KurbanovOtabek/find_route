@@ -3,8 +3,10 @@ from django.test import TestCase
 from django.urls import reverse
 
 from cities.models import City
+from routes.forms import RouteForm
 from trains.models import Train
 from routes import views as routes_view
+from routes.utils import dfs_paths, get_graph
 from cities import views as cities_view
 
 
@@ -63,3 +65,46 @@ class AllTestsCase(TestCase):
         self.assertEqual(200, response.status_code)
         self.assertTemplateUsed(response, template_name='cities/detail.html')
         self.assertEqual(response.resolver_match.func.__name__, cities_view.CityDetailView.as_view().__name__)
+
+    def test_find_all_routes(self):
+        qs = Train.objects.all()
+        graph = get_graph(qs)
+        all_routes = list(dfs_paths(graph, self.city_A.id, self.city_E.id))
+        self.assertEqual(len(all_routes), 4)
+
+    def test_valid_route_form(self):
+        data = {'from_city': self.city_A.id, 'to_city': self.city_B.id,
+                'cities': [self.city_E.id, self.city_D.id],
+                'travelling_time': 9
+                }
+        form = RouteForm(data=data)
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_route_form(self):
+        data = {'from_city': self.city_A.id, 'to_city': self.city_B.id,
+                'cities': [self.city_E.id, self.city_D.id],
+                }
+        form = RouteForm(data=data)
+        self.assertFalse(form.is_valid())
+        data = {'from_city': self.city_A.id, 'to_city': self.city_B.id,
+                'cities': [self.city_E.id, self.city_D.id],
+                'travelling_time': 9.35
+                }
+        form = RouteForm(data=data)
+        self.assertFalse(form.is_valid())
+
+    def test_message_error_more_time(self):
+        data = {'from_city': self.city_A.id, 'to_city': self.city_E.id,
+                'cities': [self.city_C.id],
+                'travelling_time': 9
+                }
+        response = self.client.post('/find_routes/', data)
+        self.assertContains(response, 'Время в пути больше заданного', 1, 200)
+
+    def test_message_error_from_cities(self):
+        data = {'from_city': self.city_B.id, 'to_city': self.city_E.id,
+                'cities': [self.city_C.id],
+                'travelling_time': 439
+                }
+        response = self.client.post('/find_routes/', data)
+        self.assertContains(response, 'Маршрут, через эти города невозможен', 1, 200)
